@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Data Communication & Networking — DCN Blog</title>
+
+  <!-- Single CSS block (no external deps) -->
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#9aa6b2;
+      --accent:#2dd4bf;
+      --accent-2:#60a5fa;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --max-width:1100px;
+      --radius:14px;
+      --mono: "Courier New", monospace;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.06), transparent 8%),
+        radial-gradient(900px 400px at 90% 90%, rgba(45,212,191,0.04), transparent 8%),
+        var(--bg);
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    /* SIDEBAR */
+    aside.sidebar{
+      background:linear-gradient(180deg,var(--card), #071023 110%);
+      border-radius:var(--radius);
+      padding:18px;
+      position:sticky;
+      top:28px;
+      height:calc(100vh - 56px);
+      overflow:auto;
+      box-shadow: 0 8px 36px rgba(2,6,23,0.6);
+    }
+    .logo{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    .svgwrap{width:54px;height:54px;flex:0 0 54px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center}
+    .logo h1{font-size:16px;margin:0;color:#fff}
+    .logo p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav.toc{margin-top:12px}
+    nav.toc a{
+      display:block;padding:10px 12px;color:var(--muted);text-decoration:none;border-radius:10px;margin-bottom:8px;font-size:14px;
+    }
+    nav.toc a:hover{background:var(--glass); color:#dff7f2}
+
+    .search{margin-top:12px;display:flex;gap:8px;align-items:center}
+    .search input{flex:1;padding:10px 12px;border-radius:10px;border:none;background:var(--glass-2);color:inherit;outline:none}
+
+    .quick{margin-top:16px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%);font-size:13px;color:var(--muted)}
+
+    /* MAIN */
+    main{min-height:80vh}
+    .hero{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:20px;border-radius:var(--radius);display:flex;gap:16px;align-items:center;margin-bottom:16px;box-shadow:0 10px 30px rgba(2,6,23,0.45)
+    }
+    .hero .title{flex:1}
+    .hero h2{margin:0 0 6px 0;font-size:20px}
+    .hero p{margin:0;color:var(--muted);font-size:14px}
+
+    /* Visuals */
+    .visuals{display:flex;gap:12px;align-items:center;justify-content:flex-end;flex:0 0 240px}
+    .visual{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg, rgba(255,255,255,0.02), transparent);display:grid;place-items:center;padding:6px}
+    .spin{animation:spin 9s linear infinite}
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    .pulse{animation:pulse 2.6s ease-in-out infinite}
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+    .float{animation:floaty 4.2s ease-in-out infinite}
+    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+    .blink{animation:blink 1.8s steps(2) infinite}
+    @keyframes blink{0%{opacity:1}50%{opacity:0.25}100%{opacity:1}}
+
+    /* ARTICLE / CARDS */
+    article{
+      background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);
+      padding:18px;border-radius:var(--radius);color:#dfeef9;line-height:1.55;
+    }
+    h3{margin-top:18px;margin-bottom:8px}
+    p.lead{color:var(--muted);margin-top:6px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border-radius:12px;padding:12px;min-height:110px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);transition:transform .28s ease,box-shadow .28s ease}
+    .card:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(2,6,23,0.52)}
+    .card h4{margin:0 0 6px 0;font-size:15px}
+    .muted{color:var(--muted);font-size:13px}
+
+    pre.code{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;overflow:auto;margin-top:12px;font-family:var(--mono);font-size:13px;color:#e6f6f2}
+
+    footer{margin-top:16px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+    .tags{display:flex;gap:8px}
+    .tag{padding:6px 8px;background:var(--glass);border-radius:999px;font-size:12px}
+
+    /* small helpers */
+    a:focus,input:focus,button:focus{outline:3px solid rgba(96,165,250,0.18);outline-offset:2px;border-radius:6px}
+    ::-webkit-scrollbar{height:10px;width:10px}
+    ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.03);border-radius:999px}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr;padding:16px}
+      aside.sidebar{position:relative;height:auto;top:auto}
+      .visuals{justify-content:flex-start}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Site sidebar">
+      <div class="logo">
+        <div class="svgwrap" aria-hidden="true">
+          <!-- small network glyph -->
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="6.5" cy="6.5" r="2.6" fill="#fff" opacity="0.95"/>
+            <circle cx="17.5" cy="6.5" r="2.6" fill="#fff" opacity="0.9"/>
+            <circle cx="12" cy="16.2" r="2.8" fill="#fff" opacity="0.85"/>
+            <path d="M8.9 7.2L11.1 14.2" stroke="#063647" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M15.1 7.2L12.9 14.2" stroke="#063647" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1>DCN Blog</h1>
+          <p>Data Communication & Networking — guides & notes</p>
+        </div>
+      </div>
+
+      <div class="search" role="search" aria-label="Search posts">
+        <input placeholder="Search topics (e.g., TCP/IP, OSI)" aria-label="Search"/>
+      </div>
+
+      <nav class="toc" aria-label="Table of contents">
+        <a href="#intro">Intro & Key Concepts</a>
+        <a href="#osi">OSI Model</a>
+        <a href="#tcpip">TCP/IP & Protocols</a>
+        <a href="#topologies">Topologies & Devices</a>
+        <a href="#media">Transmission Media</a>
+        <a href="#security">Network Security</a>
+      </nav>
+
+      <div class="quick" aria-live="polite">
+        <strong>Quick tips</strong>
+        <ul style="padding-left:16px;margin:8px 0 0 0;color:var(--muted)">
+          <li>Separate layers clearly when designing.</li>
+          <li>Practice subnetting and Wireshark capture analysis.</li>
+          <li>Segment networks for better security.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+      <article>
+        <div class="hero" id="intro">
+          <div class="title">
+            <h2>Essentials of Data Communication & Networking</h2>
+            <p class="lead">Concise guide covering OSI/TCP-IP, devices, media and security — ready for notes or deployment.</p>
+          </div>
+
+          <div class="visuals" aria-hidden="true">
+            <!-- Inline SVGs (4 images) -->
+            <div class="visual spin" title="Internet globe">
+              <svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="30" stroke="white" stroke-opacity="0.06" stroke-width="2" fill="none"/>
+                <g transform="translate(6,6)" stroke="#fff" stroke-opacity="0.9" stroke-width="1.4" fill="none">
+                  <ellipse cx="26" cy="26" rx="24" ry="12" />
+                  <path d="M26 2 v48"/>
+                  <path d="M2 14 q24 12 48 0" />
+                  <path d="M2 38 q24 -12 48 0" />
+                </g>
+              </svg>
+            </div>
+
+            <div class="visual pulse" title="Data packet">
+              <svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="16" width="44" height="32" rx="6" fill="none" stroke="#fff" stroke-opacity="0.9" stroke-width="1.8"/>
+                <path d="M18 24h28" stroke="#fff" stroke-opacity="0.9" stroke-width="1.6" stroke-linecap="round"/>
+                <circle cx="18" cy="36" r="2.6" fill="#fff"/>
+                <circle cx="46" cy="36" r="2.6" fill="#fff"/>
+              </svg>
+            </div>
+
+            <div class="visual float" title="Transmission medium">
+              <svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 44 q20 -30 48 0" fill="none" stroke="#fff" stroke-opacity="0.9" stroke-width="1.6" stroke-linecap="round"/>
+                <rect x="10" y="8" width="12" height="8" rx="2" fill="#fff" opacity="0.06"/>
+              </svg>
+            </div>
+
+            <div class="visual blink" title="Router">
+              <svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="18" width="48" height="28" rx="5" fill="none" stroke="#fff" stroke-opacity="0.9" stroke-width="1.6"/>
+                <circle cx="20" cy="32" r="2.6" fill="#fff"/>
+                <circle cx="32" cy="32" r="2.6" fill="#fff"/>
+                <circle cx="44" cy="32" r="2.6" fill="#fff"/>
+                <path d="M16 12 v6" stroke="#fff" stroke-opacity="0.9" stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M48 12 v6" stroke="#fff" stroke-opacity="0.9" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENT -->
+        <h3 id="what">What is Data Communication?</h3>
+        <p>
+          <strong>Data communication</strong> = exchange of data between devices over a medium (copper, fiber, wireless). Elements: sender, receiver, medium, message, protocol.
+        </p>
+
+        <h3 id="osi">OSI Model — Layered Approach</h3>
+        <p class="muted">OSI splits networking into 7 layers to standardize responsibilities and improve interoperability.</p>
+        <div class="grid" aria-hidden="false">
+          <div class="card"><h4>Layer 7 — Application</h4><p class="muted">HTTP, FTP, SMTP — app-level services.</p></div>
+          <div class="card"><h4>Layer 6 — Presentation</h4><p class="muted">Formatting, encryption (TLS), compression.</p></div>
+          <div class="card"><h4>Layer 5 — Session</h4><p class="muted">Session/dialog control.</p></div>
+          <div class="card"><h4>Layer 4 — Transport</h4><p class="muted">TCP/UDP — reliability, flow control.</p></div>
+          <div class="card"><h4>Layer 3 — Network</h4><p class="muted">IP — routing and addressing.</p></div>
+          <div class="card"><h4>Layer 2 — Data Link</h4><p class="muted">Framing, MAC addressing (Ethernet).</p></div>
+          <div class="card"><h4>Layer 1 — Physical</h4><p class="muted">Electrical/optical/radio signals.</p></div>
+          <div class="card"><h4>Tip</h4><p class="muted">TCP/IP model = 4 layers (App, Transport, Internet, Link).</p></div>
+        </div>
+
+        <h3 id="tcpip">TCP/IP & Key Protocols</h3>
+        <ul>
+          <li><strong>IP</strong> — addressing/routing (IPv4/IPv6)</li>
+          <li><strong>TCP</strong> — reliable transport</li>
+          <li><strong>UDP</strong> — low-latency datagrams</li>
+          <li><strong>ICMP</strong> — diagnostics (ping)</li>
+          <li><strong>HTTP/HTTPS/DNS</strong> — common app protocols</li>
+        </ul>
+
+        <pre class="code">
+// Packet journey (simplified):
+// App -> TCP segment -> IP packet -> Link frame -> Physical bits
+        </pre>
+
+        <h3 id="topologies">Topologies & Devices</h3>
+        <div class="grid">
+          <div class="card"><h4>Topologies</h4><p class="muted">Bus, star, ring, mesh — choose by cost & fault tolerance.</p></div>
+          <div class="card"><h4>Devices</h4><p class="muted">Hub (L1), Switch (L2), Router (L3), Firewall.</p></div>
+          <div class="card"><h4>Switching</h4><p class="muted">Circuit vs Packet switching — internet uses packets.</p></div>
+          <div class="card"><h4>Wireless</h4><p class="muted">APs, channels, interference, 802.11 standards.</p></div>
+        </div>
+
+        <h3 id="media">Transmission Media</h3>
+        <ul>
+          <li><strong>Twisted pair</strong> — Ethernet Cat5e/Cat6</li>
+          <li><strong>Coaxial</strong> — legacy cable</li>
+          <li><strong>Fiber</strong> — high bandwidth, long distance</li>
+          <li><strong>Wireless</strong> — shared medium, variable latency</li>
+        </ul>
+
+        <h3 id="security">Network Security Basics</h3>
+        <ul>
+          <li>Encryption (TLS, IPsec) for confidentiality</li>
+          <li>Integrity via hashes/signatures</li>
+          <li>Authentication with certs/keys</li>
+          <li>Segmentation: VLANs/subnets</li>
+        </ul>
+
+        <footer>
+          <div>
+            <small>Last updated: <strong>November 18, 2025</strong></small>
+            <div style="margin-top:6px;color:var(--muted)">Author: DCN Notes • Licence: CC BY-NC</div>
+          </div>
+          <div class="tags" aria-hidden="true">
+            <span class="tag">OSI</span>
+            <span class="tag">TCP/IP</span>
+            <span class="tag">Routing</span>
+            <span class="tag">Security</span>
+          </div>
+        </footer>
+      </article>
+    </main>
+  </div>
+</body>
+</html>
